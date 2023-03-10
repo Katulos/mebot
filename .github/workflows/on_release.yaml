@@ -1,0 +1,59 @@
+name: Deploy
+
+on:
+  push:
+#    branches:
+#      - develop
+#      - dev
+
+    branches:
+      - master
+      - main
+      - 'releases/**'
+      - '!releases/**-alpha'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get current date
+      id: date
+      run: echo "date=$(date +'%Y-%m-%d_%H_%M_%S')" >> $GITHUB_OUTPUT
+    - name: Create env file
+      uses: DamianReeves/write-file-action@master
+      with:
+        path: '.env'
+        contents: |
+          API_ID=${{ secrets.API_ID }}
+          API_HASH=${{ secrets.API_HASH }}
+          BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+          PHONE=${{ secrets.PHONE }}
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+        write-mode: overwrite
+    - name: Replace systemd unit file
+      run: |
+        sed -i 's|$REMOTE_TARGET|${{ secrets.REMOTE_TARGET }}|g' deadwood-mebot.service
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "./"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
+          EXCLUDE: "/venv/, /.venv/, /.git/, /.github/"
+          SCRIPT_BEFORE: |
+            sudo systemctl stop deadwood-mebot.service
+            sudo systemctl disable deadwood-mebot.service
+            tar --exclude='${{ secrets.REMOTE_TARGET }}/venv' -zcvf ~/deadwood-mebot_backup_${{ steps.date.outputs.date }}.tgz ${{ secrets.REMOTE_TARGET }}
+          SCRIPT_AFTER: |
+            chmod 0777 ${{ secrets.REMOTE_TARGET }}/data
+            python3 -m venv ${{ secrets.REMOTE_TARGET }}/venv
+            cd ${{ secrets.REMOTE_TARGET }} && . ./venv/bin/activate && \
+            pip install -r requirements.txt && aerich upgrade
+            sudo ln -s ${{ secrets.REMOTE_TARGET }}/deadwood-mebot.service /etc/systemd/system/deadwood-mebot.service
+            sudo systemctl daemon-reload
+            sudo systemctl enable deadwood-mebot.service
+            sudo systemctl start deadwood-mebot.service
