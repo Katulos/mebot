@@ -46,8 +46,6 @@ jobs:
           TARGET: ${{ secrets.REMOTE_TARGET }}
           EXCLUDE: "/venv/, /.venv/, /.git/, /.github/"
           SCRIPT_BEFORE: |
-#            sudo systemctl stop deadwood-mebot.service
-#            sudo systemctl disable deadwood-mebot.service
             tar --exclude='${{ secrets.REMOTE_TARGET }}/venv' -zcvf ~/deadwood-mebot_backup_${{ steps.date.outputs.date }}.tgz ${{ secrets.REMOTE_TARGET }}
           SCRIPT_AFTER: |
             chmod 0777 ${{ secrets.REMOTE_TARGET }}/data
@@ -55,6 +53,3 @@ jobs:
             cd ${{ secrets.REMOTE_TARGET }} && . ./venv/bin/activate && \
             pip install -r requirements.txt && aerich upgrade
             sudo ln -s ${{ secrets.REMOTE_TARGET }}/deadwood-mebot.service /etc/systemd/system/deadwood-mebot.service
-#            sudo systemctl daemon-reload
-#            sudo systemctl enable deadwood-mebot.service
-#            sudo systemctl start deadwood-mebot.service
