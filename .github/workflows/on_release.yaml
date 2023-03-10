@@ -36,10 +36,6 @@ jobs:
         sed -i 's|$REMOTE_TARGET|${{ secrets.REMOTE_TARGET }}|g' deadwood-mebot.service
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@main
-      run: |
-        install -m 600 -D /dev/null ~/.ssh/id_rsa
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: "-rlgoDzvc -i --delete"
