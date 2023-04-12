@@ -3,8 +3,8 @@ import re
 from pyrogram import Client, errors, filters
 from pyrogram.types import Message
 
-from app import logger
-from app.bot import command
+from mebot import logger
+from mebot.bot import command
 
 me_command = "me"
 

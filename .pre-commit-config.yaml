@@ -36,6 +36,15 @@ repos:
       - id: requirements-txt-fixer
         args:
           [ "requirements.txt", "requirements-dev.txt", "requirements-test.txt" ]
+  - repo: https://github.com/asottile/setup-cfg-fmt
+    rev: v2.2.0
+    hooks:
+      - id: setup-cfg-fmt
+#  - repo: https://github.com/tox-dev/tox-ini-fmt
+#    rev: 1.0.0
+#    hooks:
+#      - id: tox-ini-fmt
+#        args: [ "-p", "fix_lint,type" ]
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.4.2
     hooks:

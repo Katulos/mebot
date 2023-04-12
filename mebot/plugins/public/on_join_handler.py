@@ -1,9 +1,9 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from app import logger
-from app.models import Chat
-from app.utils.utils import reload_admins, update_chat_member
+from mebot import logger
+from mebot.models import Chat
+from mebot.utils.utils import reload_admins, update_chat_member
 
 
 # pylint: disable=no-member

@@ -9,15 +9,15 @@ from time import time
 from pyrogram import Client, enums, errors, filters, types
 from pyrogram.types import ChatPermissions
 
-from app import logger, shared
-from app.utils import custom_filters
+from mebot import logger, settings
+from mebot.utils import custom_filters
 
-shared.BANNED_USERS = BANNED_USERS = filters.user()
+BANNED_USERS = filters.user()
 
 MESSAGES, SECONDS, CB_SECONDS = (
-    shared.settings.MESSAGES,
-    shared.settings.SECONDS,
-    shared.settings.CB_SECONDS,
+    settings.MESSAGES,
+    settings.SECONDS,
+    settings.CB_SECONDS,
 )
 
 _users = defaultdict(list)
@@ -60,7 +60,7 @@ async def on_flood_handler(
         if is_callback:
             return await update.answer(
                 Template("Stop flooding! 😡").substitute(
-                    SEC=shared.settings.CB_SECONDS,
+                    SEC=settings.CB_SECONDS,
                 ),
                 show_alert=True,
             )
@@ -71,7 +71,7 @@ async def on_flood_handler(
                     user_id=update.from_user.id,
                     permissions=ChatPermissions(),
                     until_date=datetime.now()
-                    + timedelta(minutes=shared.settings.CB_SECONDS),
+                    + timedelta(minutes=settings.CB_SECONDS),
                 )
             elif not client.me.is_bot:
                 await client.block_user(update.from_user.id)

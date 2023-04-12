@@ -5,8 +5,8 @@ import asyncio
 import tortoise
 from pyrogram import enums, errors
 
-from app import logger
-from app.models import Chat, ChatMember
+from mebot import logger
+from mebot.models import Chat, ChatMember
 
 
 async def update_chat_member(chat_id: int, user_id: int, **kwargs):

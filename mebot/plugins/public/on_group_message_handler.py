@@ -4,9 +4,9 @@ import tortoise
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from app.models import Chat
-from app.plugins.public.on_flood_handler import BANNED_USERS
-from app.utils.utils import reload_admins, update_chat_member
+from mebot.models import Chat
+from mebot.plugins.public.on_flood_handler import BANNED_USERS
+from mebot.utils.utils import reload_admins, update_chat_member
 
 
 @Client.on_message(filters.group & ~BANNED_USERS, group=1000)

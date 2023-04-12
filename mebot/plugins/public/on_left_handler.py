@@ -1,8 +1,8 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from app import logger
-from app.models import Chat, ChatMember
+from mebot import logger
+from mebot.models import Chat, ChatMember
 
 
 @Client.on_message(filters.left_chat_member)

@@ -1,0 +1,6 @@
+include migrations/**
+include migrations/**/*
+exclude data/*
+exclude data/**
+exclude data/**/*
+include data/.gitkeep

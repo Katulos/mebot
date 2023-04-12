@@ -31,7 +31,6 @@ class ChatMember(Model):
     chat_id = fields.BigIntField()
     is_admin = fields.BooleanField(default=False)
     is_bot = fields.BooleanField(default=False)
-    is_banned = fields.BooleanField(default=False)
 
     class Meta:
         table = "chat_member"

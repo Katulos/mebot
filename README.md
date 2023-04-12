@@ -1,4 +1,8 @@
 # deadwood-mebot
+Implementation of the /me command for Telegram chats like in IRC.
+
+Developed for Deadwood chat.
+
 Before deployment, you should configure sudoers like
 ```commandline
 $ visudo -f /etc/sudoers.d/deploy-user-deadwood-mebot
