@@ -173,3 +173,6 @@ data/*
 !data/.gitkeep
 
 mebot/plugins/private
+
+# Ignore dynaconf secret files
+.secrets.*

@@ -13,30 +13,30 @@ command = partial(filters.command, prefixes=["!", "/", "."])
 
 class Bot(Client):  # pylint: disable=too-many-ancestors
     def __init__(self):
-        if settings.PHONE:
+        if settings.get("phone"):
             super().__init__(
-                name=settings.SESSION_URL,
-                api_id=settings.API_ID,
-                api_hash=settings.API_HASH,
-                phone_number=settings.PHONE,
-                test_mode=settings.TEST_ENV,
+                name=settings.get("session_url"),
+                api_id=settings.get("api_id"),
+                api_hash=settings.get("api_hash"),
+                phone_number=settings.get("phone"),
+                test_mode=settings.get("test_env"),
                 plugins={"root": "mebot.plugins"},
             )
             logger.info("Auth as user")
-        elif settings.BOT_TOKEN:
+        elif settings.get("bot_token"):
             super().__init__(
-                name=settings.SESSION_URL,
-                api_id=settings.API_ID,
-                api_hash=settings.API_HASH,
-                bot_token=settings.BOT_TOKEN,
-                test_mode=settings.TEST_ENV,
+                name=settings.get("session_url"),
+                api_id=settings.get("api_id"),
+                api_hash=settings.get("api_hash"),
+                bot_token=settings.get("bot_token"),
+                test_mode=settings.get("test_env"),
                 plugins={"root": "mebot.plugins"},
             )
             logger.info("Auth as bot")
         else:
             logger.critical(
                 "One of the mandatory parameters for authorization"
-                " (BOT_TOKEN or PHONE) is not defined",
+                " (bot_token or phone) is not defined",
             )
             sys.exit(1)
 

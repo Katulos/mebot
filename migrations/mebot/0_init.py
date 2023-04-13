@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS "chat_member" (
 CREATE TABLE IF NOT EXISTS "aerich" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     "version" VARCHAR(255) NOT NULL,
-    "mebot" VARCHAR(100) NOT NULL,
+    "app" VARCHAR(100) NOT NULL,
     "content" JSON NOT NULL
 );"""
 

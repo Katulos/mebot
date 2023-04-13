@@ -1,24 +1,14 @@
 from __future__ import annotations
 
 import logging
-import sys
 
-from pydantic import ValidationError
-
-from mebot.config import Settings
+from mebot.config.settings import settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-try:
-    settings = Settings()
-except ValidationError as e:
-    logger.critical(e)
-    sys.exit(0)
-
-
 TORTOISE_ORM = {
-    "connections": {"default": settings.DATABASE_URL},
+    "connections": {"default": settings.get("database_url")},
     "apps": {
         "mebot": {
             "models": ["mebot.models", "aerich.models"],

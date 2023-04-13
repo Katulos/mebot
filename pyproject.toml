@@ -8,7 +8,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.aerich]
-tortoise_orm = "app.TORTOISE_ORM"
+tortoise_orm = "mebot.TORTOISE_ORM"
 location = "./migrations"
 src_folder = "./."
 

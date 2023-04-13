@@ -15,9 +15,9 @@ from mebot.utils import custom_filters
 BANNED_USERS = filters.user()
 
 MESSAGES, SECONDS, CB_SECONDS = (
-    settings.MESSAGES,
-    settings.SECONDS,
-    settings.CB_SECONDS,
+    settings.get("messages"),
+    settings.get("seconds"),
+    settings.get("cb_seconds"),
 )
 
 _users = defaultdict(list)
@@ -60,7 +60,7 @@ async def on_flood_handler(
         if is_callback:
             return await update.answer(
                 Template("Stop flooding! 😡").substitute(
-                    SEC=settings.CB_SECONDS,
+                    SEC=CB_SECONDS,
                 ),
                 show_alert=True,
             )
@@ -70,8 +70,7 @@ async def on_flood_handler(
                     chat_id=update.chat.id,
                     user_id=update.from_user.id,
                     permissions=ChatPermissions(),
-                    until_date=datetime.now()
-                    + timedelta(minutes=settings.CB_SECONDS),
+                    until_date=datetime.now() + timedelta(minutes=CB_SECONDS),
                 )
             elif not client.me.is_bot:
                 await client.block_user(update.from_user.id)
