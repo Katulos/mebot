@@ -1,9 +1,10 @@
+import logging
 import re
 
 from pyrogram import Client, errors, filters
 from pyrogram.types import Message
 
-from app.bot import command, logger
+from app.client.bot import command
 
 me_command = "me"
 
@@ -24,4 +25,4 @@ async def me_command_handler(client: Client, message: Message) -> None:
                 reply_to_message_id=message.reply_to_message_id,
             )
         except errors.MessageDeleteForbidden as e:
-            logger.error(e.MESSAGE)
+            logging.error(e.MESSAGE)

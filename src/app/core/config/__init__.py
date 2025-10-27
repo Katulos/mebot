@@ -10,8 +10,8 @@ logger = logging.getLogger(__name__)
 TORTOISE_ORM = {
     "connections": {"default": settings.get("database_url")},
     "apps": {
-        "mebot": {
-            "models": ["mebot.models", "aerich.models"],
+        "app": {
+            "models": ["app.adapters.db.models", "aerich.models"],
             "default_connection": "default",
         },
     },

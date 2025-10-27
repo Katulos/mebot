@@ -1,11 +1,13 @@
-import asyncio
+import os
 import pathlib
-from collections.abc import Callable
 from typing import Any, Callable
 
 import click
 
-from app.bot import bot as _tgbot
+from app.client.bot import Bot
+from app.core import logging
+
+logging.setup_logger()
 
 
 def common_command_options(func: Callable[..., Any]) -> Callable[..., Any]:
@@ -34,4 +36,11 @@ def run() -> None:
 @common_command_options
 def bot(ctx: click.Context, config: pathlib.Path) -> None:
     """Run bot application."""
-    asyncio.run(_tgbot.run(config))
+    # TODO: wtf?!
+    src_path = pathlib.Path(__file__).parent.parent
+    src_path = pathlib.Path("src").resolve()
+
+    os.chdir(src_path)
+    #
+    bot = Bot()
+    bot.run()

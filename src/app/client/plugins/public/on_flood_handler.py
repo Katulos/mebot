@@ -1,16 +1,17 @@
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import asyncio
 from collections import defaultdict
 from datetime import datetime, timedelta
+import logging
 from string import Template
 from time import time
 
 from pyrogram import Client, enums, errors, filters, types
 from pyrogram.types import ChatPermissions
 
-from app.bot import logger, settings
-from app.bot.utils import custom_filters
+from app.core.config import settings
+from app.client.utils import custom_filters
 
 BANNED_USERS = filters.user()
 
@@ -29,8 +30,7 @@ async def is_flood(
     seconds: int = 6,
     users=None,
 ) -> bool | None:
-    """Checks if a user is flooding"""
-
+    """Checks if a user is flooding."""
     if users is None:
         users = _users
     users[user.id].append(time())
@@ -75,9 +75,9 @@ async def on_flood_handler(
             elif not client.me.is_bot:
                 await client.block_user(update.from_user.id)
         except errors.ChatAdminRequired as e:
-            logger.error("%s %s", __name__, e.MESSAGE)
+            logging.error("%s %s", __name__, e.MESSAGE)
         except errors.UserAdminInvalid as e:
-            logger.error("%s %s", __name__, e.MESSAGE)
+            logging.error("%s %s", __name__, e.MESSAGE)
         return BANNED_USERS.add(update.from_user.id)
     if update.from_user.id in BANNED_USERS:
         try:
@@ -90,9 +90,9 @@ async def on_flood_handler(
             elif not client.me.is_bot:
                 await client.unblock_user(update.from_user.id)
         except errors.ChatAdminRequired as e:
-            logger.error("%s %s", __name__, e.MESSAGE)
+            logging.error("%s %s", __name__, e.MESSAGE)
         except errors.UserAdminInvalid as e:
-            logger.error("%s %s", __name__, e.MESSAGE)
+            logging.error("%s %s", __name__, e.MESSAGE)
         BANNED_USERS.remove(update.from_user.id)
     await update.continue_propagation()
 

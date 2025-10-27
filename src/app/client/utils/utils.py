@@ -1,17 +1,16 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 
 import tortoise
 from pyrogram import enums, errors
 
-from app.bot import logger
-from app.bot.models import Chat, ChatMember
+from app.adapters.db.models import Chat, ChatMember
 
 
 async def update_chat_member(chat_id: int, user_id: int, **kwargs):
-    """update chat member"""
-
+    """Update chat member."""
     await ChatMember.update_or_create(
         chat_id=chat_id,
         user_id=user_id,
@@ -20,7 +19,7 @@ async def update_chat_member(chat_id: int, user_id: int, **kwargs):
 
 
 async def reload_admins(client, chat_id):
-    """reload admins"""
+    """Reload admins."""
     await ChatMember.filter(chat_id=chat_id, is_admin=True).update(
         is_admin=False,
     )
@@ -44,5 +43,5 @@ async def reload_admins(client, chat_id):
                     last_admins_update=tortoise.timezone.now(),
                 )
     except errors.FloodWait as e:
-        logger.error(e.MESSAGE)
+        logging.error(e.MESSAGE)
         await asyncio.sleep(e.value)

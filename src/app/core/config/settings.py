@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 from pathlib import Path
@@ -6,19 +7,16 @@ from dynaconf import Dynaconf, ValidationError, Validator
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
 
-DEFAULT_CONFIG_PATH: str = os.pathsep.join(
-    [
-        "?/etc/mebot/settings.toml",
-        "?/etc/mebot/.secrets.toml",
-        "?~/.config/mebot/settings.toml",
-        "?~/.config/mebot/.secrets.toml",
-        os.path.join(BASE_DIR, "settings.toml"),
-        os.path.join(BASE_DIR, ".secrets.toml"),
-    ],
-)
 
 settings = Dynaconf(
-    settings_files=DEFAULT_CONFIG_PATH,
+    settings_files=[
+        "?/etc/mebot/settings.yml",
+        "?/etc/mebot/.secrets.yml",
+        "?~/.config/mebot/settings.yml",
+        "?~/.config/mebot/.secrets.yml",
+        os.path.join(BASE_DIR, "settings.yml"),
+        os.path.join(BASE_DIR, ".secrets.yml"),
+    ],
 )
 
 settings.validators.register(
@@ -62,6 +60,5 @@ settings.validators.register(
 try:
     settings.validators.validate_all()
 except ValidationError as e:
-    accumulative_errors = e.message
-    logger.error(accumulative_errors)
+    logging.error(e.message)
     sys.exit(1)

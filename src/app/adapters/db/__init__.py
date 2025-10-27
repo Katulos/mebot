@@ -2,16 +2,13 @@ from __future__ import annotations
 
 import logging
 
-from app.bot.config.settings import settings
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from app.core.config import settings
 
 TORTOISE_ORM = {
     "connections": {"default": settings.get("database_url")},
     "apps": {
-        "app": {
-            "models": ["app.bot.models", "aerich.models"],
+        "mebot": {
+            "models": ["app.adapters.db.models", "aerich.models"],
             "default_connection": "default",
         },
     },

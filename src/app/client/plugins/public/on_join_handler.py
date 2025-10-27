@@ -1,9 +1,10 @@
+import logging
+
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from app.bot import logger
-from app.bot.models import Chat
-from app.bot.utils.utils import reload_admins, update_chat_member
+from app.adapters.db.models import Chat
+from app.client.utils.utils import reload_admins, update_chat_member
 
 
 # pylint: disable=no-member
@@ -14,7 +15,7 @@ async def on_join_handler(client: Client, message: Message) -> None:
         chat_id=message.chat.id,
         user_id=message.from_user.id,
     )
-    logger.info(
+    logging.info(
         "ID %s %s has join",
         message.from_user.id,
         message.from_user.username,
