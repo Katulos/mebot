@@ -16,27 +16,27 @@ jobs:
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d_%H_%M_%S')" >> $GITHUB_OUTPUT
-      - name: Create .secrets.toml file
+      - name: Create .secrets.yml file
         uses: DamianReeves/write-file-action@master
         with:
-          path: ".secrets.toml"
+          path: ".secrets.yml"
           contents: |
-            api_id=${{ secrets.API_ID }}
-            api_hash=${{ secrets.API_HASH }}
-            bot_token=${{ secrets.BOT_TOKEN }}
-            phone=${{ secrets.PHONE }}
-            database_url=${{ secrets.DATABASE_URL }}
+            api_id: ${{ secrets.API_ID }}
+            api_hash: ${{ secrets.API_HASH }}
+            bot_token: ${{ secrets.BOT_TOKEN }}
+            phone: ${{ secrets.PHONE }}
+            database_url: ${{ secrets.DATABASE_URL }}
           write-mode: overwrite
-      - name: Create settings.toml file
+      - name: Create settings.yml file
         uses: DamianReeves/write-file-action@master
         with:
-          path: "settings.toml"
+          path: "settings.yml"
           contents: |
-            database_url=${{ secrets.DATABASE_URL }}
+            database_url: ${{ secrets.DATABASE_URL }}
           write-mode: overwrite
       - name: Replace systemd unit file
         run: |
-          sed -i 's|$REMOTE_TARGET|${{ secrets.REMOTE_TARGET }}|g' deadwood-mebot.service
+          sed -i 's|$REMOTE_TARGET|${{ secrets.REMOTE_TARGET }}|g' mebot.service
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
@@ -49,15 +49,15 @@ jobs:
           TARGET: ${{ secrets.REMOTE_TARGET }}
           EXCLUDE: "/venv/, /.venv/, /.git/, /.github/"
           SCRIPT_BEFORE: |
-            sudo /bin/systemctl stop deadwood-mebot.service
-            sudo /bin/systemctl disable deadwood-mebot.service
-            tar --exclude='${{ secrets.REMOTE_TARGET }}/venv' -zcvf ~/deadwood-mebot_backup_${{ steps.date.outputs.date }}.tgz ${{ secrets.REMOTE_TARGET }}
+            sudo /bin/systemctl stop mebot.service
+            sudo /bin/systemctl disable mebot.service
+            tar --exclude='${{ secrets.REMOTE_TARGET }}/venv' -zcvf ~/mebot_backup_${{ steps.date.outputs.date }}.tgz ${{ secrets.REMOTE_TARGET }}
           SCRIPT_AFTER: |
             chmod 0777 ${{ secrets.REMOTE_TARGET }}/data
             python3 -m venv ${{ secrets.REMOTE_TARGET }}/venv
             cd ${{ secrets.REMOTE_TARGET }} && . ./venv/bin/activate && \
             pip install -r requirements.txt && aerich upgrade
-            sudo /bin/ln -s ${{ secrets.REMOTE_TARGET }}/deadwood-mebot.service /etc/systemd/system/deadwood-mebot.service
+            sudo /bin/ln -s ${{ secrets.REMOTE_TARGET }}/mebot.service /etc/systemd/system/mebot.service
             sudo /bin/systemctl daemon-reload
-            sudo /bin/systemctl enable deadwood-mebot.service
-            sudo /bin/systemctl start deadwood-mebot.service
+            sudo /bin/systemctl enable mebot.service
+            sudo /bin/systemctl start mebot.service

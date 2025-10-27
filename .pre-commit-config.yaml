@@ -62,6 +62,11 @@ repos:
           - --fix=lf
         description: Forces to replace line ending by the UNIX 'lf' character.
 
+  - repo: https://github.com/hollow/pre-commit-actionlint
+    rev: "v1.6.24"
+    hooks:
+      - id: actionlint
+
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.5.5
     hooks:
