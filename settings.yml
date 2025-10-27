@@ -1,0 +1,6 @@
+database_url: "sqlite://data/db.sqlite3"
+test_env: false
+messages: 3
+seconds: 15
+cb_seconds: 15
+debug: false
