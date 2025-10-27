@@ -1,13 +1,14 @@
 import logging
 import sys
-from typing import Any, Callable, Optional, cast
+from collections.abc import Callable
+from typing import Any, cast
 
 import orjson
 import structlog
 from structlog.typing import EventDict, Processor
 
 
-def _orjson_dumps(v: Any, *, default: Optional[Callable[[Any], Any]]) -> str:
+def _orjson_dumps(v: Any, *, default: Callable[[Any], Any] | None) -> str:
     return cast(str, orjson.dumps(v, default=default).decode())
 
 
