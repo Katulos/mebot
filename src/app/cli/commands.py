@@ -11,17 +11,6 @@ from app.core import logging
 logging.setup_logger()
 
 
-def common_command_options(func: Callable[..., Any]) -> Callable[..., Any]:
-    func = click.option(
-        "--config",
-        "-c",
-        type=click.Path(dir_okay=False, path_type=pathlib.Path),
-        default="config.yml",
-        help="Path to config file. Defaults to config.yml.",
-    )(func)
-    return click.pass_context(func)
-
-
 @click.group()
 def cli() -> None:
     pass
@@ -34,7 +23,6 @@ def run() -> None:
 
 
 @run.command()
-@common_command_options
 def bot(ctx: click.Context, config: pathlib.Path) -> None:
     """Run bot application."""
     # TODO: wtf?!
