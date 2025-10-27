@@ -48,7 +48,7 @@
         }
     },
     "postCreateCommand": {
-        "setupEnvironment": "uv python install 3.8 3.9 3.10 3.11 3.12 3.13 && uv venv --python 3.8 ${containerWorkspaceFolder}/.venv && sudo chown -R $(whoami): ${containerWorkspaceFolder}/.venv && uv pip install -e ."
+        "setupEnvironment": "uv python install 3.10 3.11 3.12 3.13 && rm -rf ${containerWorkspaceFolder}/.venv && uv venv --python 3.10  && sudo chown -R $(whoami): ${containerWorkspaceFolder}/.venv && uv pip install -e ."
     },
     "remoteEnv": {
         "PATH": "${containerWorkspaceFolder}/.venv/bin:${containerEnv:PATH}",

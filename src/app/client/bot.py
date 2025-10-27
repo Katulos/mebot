@@ -22,7 +22,7 @@ class Bot(Client):
                 api_hash=settings.get("api_hash"),
                 phone_number=settings.get("phone"),
                 test_mode=settings.get("test_env"),
-                plugins={"root": "app.bot.plugins"},
+                plugins={"root": "app.client.plugins"},
             )
             logging.info("Auth as user")
         elif settings.get("bot_token"):
@@ -32,7 +32,7 @@ class Bot(Client):
                 api_hash=settings.get("api_hash"),
                 bot_token=settings.get("bot_token"),
                 test_mode=settings.get("test_env"),
-                plugins={"root": "app.bot.plugins"},
+                plugins={"root": "app.client.plugins"},
             )
             logging.info("Auth as bot")
         else:
