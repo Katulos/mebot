@@ -16,15 +16,9 @@ def cli() -> None:
     pass
 
 
-@cli.group()
-def run() -> None:
-    """Run application components."""
-    pass
-
-
-@run.command()
-def bot(ctx: click.Context, config: pathlib.Path) -> None:
-    """Run bot application."""
+@cli.command()
+def start() -> None:
+    """Start client."""
     # TODO: wtf?!
     src_path = pathlib.Path(__file__).parent.parent
     src_path = pathlib.Path("src").resolve()
