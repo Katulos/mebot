@@ -1,35 +1,44 @@
-from __future__ import annotations
-
-from tortoise import BaseDBAsyncClient, Model, fields
-from tortoise.signals import post_delete
+from tortoise import BaseDBAsyncClient, fields
+from tortoise.models import Model
+from tortoise.signals import post_save
 
 
 class Chat(Model):
     id = fields.BigIntField(pk=True)
-    name = fields.CharField(default=False, max_length=128)
-    last_admins_update = fields.DatetimeField(auto_now=True)
+    chat_id = fields.BigIntField(unique=True)
+    chat_title = fields.CharField(default=False, max_length=128)
+    created_at = fields.DatetimeField(auto_now_add=True)
+    updated_at = fields.DatetimeField(auto_now=True)
+
+    flags: fields.OneToOneRelation["ChatFlag"]
 
     class Meta:
         table = "chat"
 
-    def __str__(self):
-        return self.name
 
+class ChatFlag(Model):
+    id = fields.BigIntField(pk=True)
+    enabled = fields.BooleanField(default=False)
+    created_at = fields.DatetimeField(auto_now_add=True)
+    updated_at = fields.DatetimeField(auto_now=True)
 
-@post_delete(Chat)
-async def chat_post_delete(
-    sender: type[Chat],
-    instance: Chat,
-    using_db: BaseDBAsyncClient | None,
-) -> None:
-    await ChatMember.filter(chat_id=instance.id).delete()
-
-
-class ChatMember(Model):
-    user_id = fields.BigIntField(pk=True)
-    chat_id = fields.BigIntField()
-    is_admin = fields.BooleanField(default=False)
-    is_bot = fields.BooleanField(default=False)
+    chat = fields.OneToOneField(
+        model_name="mebot.Chat",
+        related_name="flags",
+        on_delete=fields.CASCADE,
+    )
 
     class Meta:
-        table = "chat_member"
+        table = "chat_flag"
+
+
+@post_save(Chat)
+async def chat_post_save(
+    sender: type[Chat],
+    instance: Chat,
+    created: bool,
+    using_db: BaseDBAsyncClient | None,
+    update_fields: list[str],
+) -> None:
+    # pylint: disable=unused-argument
+    await ChatFlag.update_or_create(chat_id=instance.id)

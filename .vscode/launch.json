@@ -9,7 +9,7 @@
             "python": "${command:python.interpreterPath}",
             "console": "integratedTerminal",
             "module": "app",
-            "args": ["run", "bot"],
+            "args": ["start"],
             "cwd": "${workspaceRoot}"
         },
         {
@@ -22,7 +22,7 @@
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart",
             "module": "app",
-            "args": ["run", "bot"],
+            "args": ["start"],
             "cwd": "${workspaceRoot}",
             "debugOptions": ["RedirectOutput"]
         },
