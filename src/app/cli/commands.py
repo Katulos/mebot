@@ -1,12 +1,12 @@
-import os
-import pathlib
+import logging
 
 import click
 
-from app.client.bot import Bot
-from app.core import logging
+from app.client.bot import run
+from app.core import logging as logger
+from app.core.config import settings
 
-logging.setup_logger()
+logger.setup_logger()
 
 
 @click.group()
@@ -17,11 +17,11 @@ def cli() -> None:
 @cli.command()
 def start() -> None:
     """Start client."""
-    # TODO: wtf?!
-    src_path = pathlib.Path(__file__).parent.parent
-    src_path = pathlib.Path("src").resolve()
+    debug = settings.get("debug")
 
-    os.chdir(src_path)
-    #
-    bot = Bot()
-    bot.run()
+    if debug:
+        logger.setup_logger(loglevel=logging.DEBUG)
+    else:
+        logger.setup_logger(loglevel=logging.INFO)
+
+    run()

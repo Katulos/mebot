@@ -1,11 +1,10 @@
 import logging
 import os
-import sys
 from pathlib import Path
 
 from dynaconf import Dynaconf, ValidationError, Validator
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
+_BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
 
 
 settings = Dynaconf(
@@ -14,45 +13,77 @@ settings = Dynaconf(
         "?/etc/mebot/.secrets.yml",
         "?~/.config/mebot/settings.yml",
         "?~/.config/mebot/.secrets.yml",
-        os.path.join(BASE_DIR, "settings.yml"),
-        os.path.join(BASE_DIR, ".secrets.yml"),
+        os.path.join(_BASE_DIR, "settings.yml"),
+        os.path.join(_BASE_DIR, ".secrets.yml"),
     ],
 )
 
 settings.validators.register(
-    # Pyrogram
+    # Client
     Validator(
         "api_id",
         apply_default_on_none=True,
-        default=21724,
+        default=2040,
         is_type_of=int,
         required=True,
     ),
     Validator(
         "api_hash",
         apply_default_on_none=True,
-        default="3e0cb5efcd52300aec5994fdfc5bdc16",
+        default="b18441a1ff607e10a989891a5462e627",
+        required=True,
+    ),
+    Validator(
+        "app_version",
+        apply_default_on_none=True,
+        default="5.12.1 x64",
+        required=True,
+    ),
+    Validator(
+        "device_model",
+        apply_default_on_none=True,
+        default="B75M-D3H-BT",
+        required=True,
+    ),
+    Validator(
+        "lang_code",
+        apply_default_on_none=True,
+        default="en",
+        required=True,
+    ),
+    Validator(
+        "system_lang_code",
+        apply_default_on_none=True,
+        default="en-US",
+        required=True,
+    ),
+    Validator(
+        "system_version",
+        apply_default_on_none=True,
+        default="Windows 10",
         required=True,
     ),
     Validator("bot_token", apply_default_on_none=False),
     Validator("phone", apply_default_on_none=False),
     Validator(
-        "session_url",
-        default=os.path.join(BASE_DIR, "data/session"),
+        "admins",
+        apply_default_on_none=True,
+        default=[],
+        is_type_of=list,
         required=True,
     ),
-    Validator("test_env", default=False, is_type_of=bool),
+    Validator(
+        "session",
+        default=os.path.join(_BASE_DIR, "data/session"),
+        required=True,
+    ),
     # Database
     # like a postgres://postgres:postgres@db:5432/postgres
     Validator(
         "database_url",
-        default="sqlite://" + os.path.join(BASE_DIR, "data/db.sqlite3"),
+        default="sqlite://" + os.path.join(_BASE_DIR, "data/db.sqlite3"),
         required=True,
     ),
-    # Antiflood
-    Validator("messages", default=3, is_type_of=int, required=True),
-    Validator("seconds", default=15, is_type_of=int, required=True),
-    Validator("cb_seconds", default=15, is_type_of=int, required=True),
     # debug
     Validator("debug", default=False, is_type_of=bool),
 )
@@ -61,4 +92,3 @@ try:
     settings.validators.validate_all()
 except ValidationError as e:
     logging.error(e.message)
-    sys.exit(1)
