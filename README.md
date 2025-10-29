@@ -1,4 +1,7 @@
 # Telegram /me Bot
+![release](https://github.com/Katulos/mebot/actions/workflows/release.yml/badge.svg)
+![develop](https://github.com/Katulos/mebot/actions/workflows/develop.yml/badge.svg?branch=develop)
+
 
 A bot that implements the IRC-style `/me` command in Telegram chats. Allows users to send messages in the format "*action*", for example:  
 `*is drinking coffee*` or `*is going on vacation*`.
@@ -7,8 +10,11 @@ A bot that implements the IRC-style `/me` command in Telegram chats. Allows user
 
 > [!CAUTION]
 > ⚠️ Automating user accounts violates Telegram’s Terms of Service.
+> 
 > ⚠️ The author is not responsible for any consequences of using the bot in `user` mode.
+> 
 > ⚠️ For public or long-term use, the `bot` mode is strongly recommended.
+> 
 
 ---
 
