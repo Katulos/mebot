@@ -5,7 +5,7 @@ A bot that implements the IRC-style `/me` command in Telegram chats. Allows user
 
 ---
 
-[!WARNING]
+> [!WARNING]
 > ⚠️ Automating user accounts violates Telegram’s Terms of Service.
 > ⚠️ The author is not responsible for any consequences of using the bot in `user` mode.
 > ⚠️ For public or long-term use, the `bot` mode is strongly recommended.
