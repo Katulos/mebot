@@ -53,7 +53,7 @@ autoescape = false
 
 [semantic_release.commit_author]
 env = "GIT_COMMIT_AUTHOR"
-default = "Katulos <123748719+Katulos@users.noreply.github.com>q>"
+default = "Katulos <123748719+Katulos@users.noreply.github.com>"
 
 [semantic_release.commit_parser_options]
 minor_tags = ["feat"]
