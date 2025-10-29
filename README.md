@@ -57,7 +57,7 @@ The bot can run in two modes — **as an official Telegram Bot** or **as a regul
 
 ## Installation and Setup
 
-1. Install dependencies:
+1. Install uv:
    ### Use curl to download the script and execute it with sh:
    ```bash
    curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -69,10 +69,10 @@ The bot can run in two modes — **as an official Telegram Bot** or **as a regul
 2. Install the bot:
    ```bash
    git clone https://github.com/katulos/mebot
-   cd bot
+   cd mebot
    uv venv
    source .venv/bin/activate
-   uv pip install -e .
+   uv pip install .
    ```
 
 3. Create a `.secrets.yml` file and configure it based on your mode:
@@ -82,6 +82,7 @@ The bot can run in two modes — **as an official Telegram Bot** or **as a regul
    api_id: your_api_id
    api_hash: your_api_hash
    bot_token: your_bot_token_here
+   admins: [your_telegram_id]   # List of admin Telegram IDs
    ```
 
    ### For User Account mode:
@@ -89,6 +90,7 @@ The bot can run in two modes — **as an official Telegram Bot** or **as a regul
    api_id: your_api_id
    api_hash: your_api_hash
    phone: your_phone_number
+   admins: [your_telegram_id]   # List of admin Telegram IDs
    ```
 
    > You can obtain `api_id` and `api_hash` at [my.telegram.org](https://my.telegram.org).
