@@ -12,21 +12,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d_%H_%M_%S')" >> $GITHUB_OUTPUT
+
+      - run: make clean
+
       - name: Create .secrets.yml file
         uses: DamianReeves/write-file-action@master
         with:
           path: ".secrets.yml"
           contents: |
-            api_id: ${{ secrets.API_ID }}
-            api_hash: ${{ secrets.API_HASH }}
-            bot_token: ${{ secrets.BOT_TOKEN }}
             phone: ${{ secrets.PHONE }}
             database_url: ${{ secrets.DATABASE_URL }}
           write-mode: overwrite
+
       - name: Create settings.yml file
         uses: DamianReeves/write-file-action@master
         with:
@@ -34,9 +40,11 @@ jobs:
           contents: |
             database_url: ${{ secrets.DATABASE_URL }}
           write-mode: overwrite
+
       - name: Replace systemd unit file
         run: |
           sed -i 's|$REMOTE_TARGET|${{ secrets.REMOTE_TARGET }}|g' mebot.service
+
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
@@ -47,17 +55,17 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
-          EXCLUDE: "/venv/, /.venv/, /.git/, /.github/"
+          EXCLUDE: "/venv/, /.venv/, /.git/, /.github/, /.devcontainer/, /.vscode/"
           SCRIPT_BEFORE: |
             sudo /bin/systemctl stop mebot.service
             sudo /bin/systemctl disable mebot.service
-            tar --exclude='${{ secrets.REMOTE_TARGET }}/venv' -zcvf ~/mebot_backup_${{ steps.date.outputs.date }}.tgz ${{ secrets.REMOTE_TARGET }}
+            tar --exclude='${{ secrets.REMOTE_TARGET }}/.venv' -zcvf ~/mebot_backup_${{ steps.date.outputs.date }}.tgz ${{ secrets.REMOTE_TARGET }}
           SCRIPT_AFTER: |
+            wget -qO- https://astral.sh/uv/install.sh | sh
             chmod 0777 ${{ secrets.REMOTE_TARGET }}/data
-            python3 -m venv ${{ secrets.REMOTE_TARGET }}/venv
-            cd ${{ secrets.REMOTE_TARGET }} && . ./venv/bin/activate && \
-            pip install -r requirements.txt && aerich upgrade
+            uv venv --python 3.10 ${{ secrets.REMOTE_TARGET }}/.venv
+            cd ${{ secrets.REMOTE_TARGET }} && . ./.venv/bin/activate && \
+            uv pip install -e . && aerich upgrade
             sudo /bin/ln -s ${{ secrets.REMOTE_TARGET }}/mebot.service /etc/systemd/system/mebot.service
             sudo /bin/systemctl daemon-reload
-            sudo /bin/systemctl enable mebot.service
-            sudo /bin/systemctl start mebot.service
+            sudo /bin/systemctl enable now mebot.service

@@ -33,8 +33,7 @@ clean-test:
 	rm -fr .pytest_cache
 
 .PHONY: test
-test:  ## Run tests
-	pytest tests/
+test: clean nox ## Run tests
 
 .PHONY: nox
 nox: clean  ## Run nox tests
