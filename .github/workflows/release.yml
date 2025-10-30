@@ -55,14 +55,14 @@ jobs:
         id: release
         uses: python-semantic-release/python-semantic-release@v9.19
         with:
-          root_options: "-c releaserc.toml"
+          root_options: "-v -c releaserc.toml"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish package distributions to GitHub Releases
         uses: python-semantic-release/publish-action@v9.19
         if: steps.release.outputs.released == 'true'
         with:
-          root_options: "-c releaserc.toml"
+          root_options: "-v -c releaserc.toml"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Publish distribution to PyPI
