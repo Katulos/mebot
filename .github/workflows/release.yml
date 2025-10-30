@@ -55,16 +55,18 @@ jobs:
         id: release
         uses: python-semantic-release/python-semantic-release@v9.19
         with:
-          github_token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+          root_options: "-c releaserc.toml"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish package distributions to GitHub Releases
         uses: python-semantic-release/publish-action@v9.19
         if: steps.release.outputs.released == 'true'
         with:
-          github_token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+          root_options: "-c releaserc.toml"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish distribution to PyPI
-        if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+      # - name: Publish distribution to PyPI
+      #   if: steps.release.outputs.released == 'true'
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     password: ${{ secrets.PYPI_API_TOKEN }}
