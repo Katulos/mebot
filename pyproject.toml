@@ -1,50 +1,55 @@
-[build-system]
-requires = [
-    "setuptools >= 46.4.0",
+[project]
+name = "mebot"
+description = "Implementation of the /me command for Telegram chats like in IRC."
+keywords = ["/me","telegram","irc"]
+dynamic = [ "version" ]
+authors = [
+    { name = "Katulos", email = "123748719+Katulos@users.noreply.github.com" }
 ]
+maintainers = [
+    { name = "Katulos", email = "123748719+Katulos@users.noreply.github.com"}
+]
+readme = "README.md"
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Internet",
+    "Topic :: Software Development :: User Interfaces"
+]
+requires-python = ">= 3.10"
+dependencies = [
+    "aerich[toml]>=0.9.2",
+    "click>=8.3.0",
+    "dynaconf>=3.2.12",
+    "orjson>=3.11.4",
+    "rich>=14.2.0",
+    "structlog>=25.5.0",
+    "telethon>=1.41.2",
+    "tortoise-orm>=0.25.1",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "app.__version__"}
+
+[project.scripts]
+mebot = "app.cli.commands:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+app= ['locales/*', 'data/*']
+
+[build-system]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.aerich]
-tortoise_orm = "app.TORTOISE_ORM"
-location = "./migrations"
+tortoise_orm = "app.adapters.db.TORTOISE_ORM"
+location = "./src/app/adapters/db/migrations"
 src_folder = "./."
-
-[tool.black]
-line-length = 79
-target-version = ["py38"]
-include = '\.pyi?$'
-exclude = '''
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | \venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-  | foo.py           # also separately exclude a file named foo.py in
-                     # the root of the project
-)
-'''
-
-[tools.flake8]
-ignore = ["E203", "E266", "E501", "W503", "F403", "F401"]
-max-complexity = 18
-select = ["B", "C", "E", "F", "W", "T4", "B9"]
-max-line-length = 79
-exclude = [".tox", ".git", "venv", ".venv", "migrations"]
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-include_trailing_comma = "True"
-force_grid_wrap = 0
-use_parentheses = "True"
-ensure_newline_before_comments = "True"
-line_length = 79
